@@ -1,5 +1,5 @@
 ---
-title: [译] 用 React Hooks 在 100 行代码内实现一个聊天 App
+title: "[译] 用 React Hooks 在 100 行代码内实现一个聊天 App"
 date: "2019-08-19T10:08:00.000Z"
 ---
 
