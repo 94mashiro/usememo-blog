@@ -1,6 +1,7 @@
 ---
 title: "[译] 用 React Hooks 在 100 行代码内实现一个聊天 App"
 date: "2019-08-19T10:08:00.000Z"
+description: "我们之前在 CSS-Tricks 就已经了解过 React Hooks。我有 一篇文章 介绍它们，来说明如何使用它们通过函数来创建组件。这两篇文章都大概地介绍了它们的运作方式，但也开辟了很多可能性。"
 ---
 
 > 原文链接：[Build a Chat App Using React Hooks in 100 Lines of Code](https://css-tricks.com/build-a-chat-app-using-react-hooks-in-100-lines-of-code/)
@@ -35,9 +36,11 @@ date: "2019-08-19T10:08:00.000Z"
 
 让我们从终端启动一个新项目：
 
-    npx create-react-app socket-client
-    cd socket-client
-    npm start
+```shell
+npx create-react-app socket-client
+cd socket-client
+npm start
+```
 
 现在我们的浏览器会被跳转到 `http://localhost:3000` ，然后看到一个默认的项目欢迎页面。
 
@@ -53,54 +56,58 @@ date: "2019-08-19T10:08:00.000Z"
 
 `useState` 内置在 React 中，所以可以通过一行代码来引入它：
 
-    import React, { useState } from 'react';
+```tsx
+import React, { useState } from 'react';
+```
 
 我们将创建一个简单的组件，如果用户已经登陆，它将会返回 "Hello"，反之如果用户已经注销，则返回登陆表单，我们通过检查变量 `id` 来进行判断。
 
 表单提交将会由 `handleSubmit` 函数来进行处理。它会检查 Name 字段是否填写。如果是，我们讲为该用户设置 `id` 和 `room` 值。否则，我们将抛出一条消息来告诉用户需要提供 Name 字段。
 
-    // App.js
-    
-    import React, { useState } from 'react';
-    import './index.css';
-    
-    export default () => {
-      const [id, setId] = useState("");
-      const [nameInput, setNameInput] = useState("");
-      const [room, setRoom] = useState("");
-    
-      const handleSubmit = e => {
-        e.preventDefault();
-        if (!nameInput) {
-          return alert("Name can't be empty");
-        }
-        setId(nameInput);
-        socket.emit("join", nameInput, room);
-      };
-    
-      return id !== '' ? (
-        <div>Hello</div>
-      ) : (
-        <div style={{ textAlign: "center", margin: "30vh auto", width: "70%" }}>
-          <form onSubmit={event => handleSubmit(event)}>
-            <input
-              id="name"
-              onChange={e => setNameInput(e.target.value.trim())}
-              required
-              placeholder="What is your name .."
-            />
-            <br />
-            <input
-              id="room"
-              onChange={e => setRoom(e.target.value.trim())}
-              placeholder="What is your room .."
-            />
-            <br />
-            <button type="submit">Submit</button>
-          </form>
-        </div>
-      );
-    };
+```tsx
+// App.js
+
+import React, { useState } from 'react';
+import './index.css';
+
+export default () => {
+  const [id, setId] = useState("");
+  const [nameInput, setNameInput] = useState("");
+  const [room, setRoom] = useState("");
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!nameInput) {
+      return alert("Name can't be empty");
+    }
+    setId(nameInput);
+    socket.emit("join", nameInput, room);
+  };
+
+  return id !== '' ? (
+    <div>Hello</div>
+  ) : (
+    <div style={{ textAlign: "center", margin: "30vh auto", width: "70%" }}>
+      <form onSubmit={event => handleSubmit(event)}>
+        <input
+          id="name"
+          onChange={e => setNameInput(e.target.value.trim())}
+          required
+          placeholder="What is your name .."
+        />
+        <br />
+        <input
+          id="room"
+          onChange={e => setRoom(e.target.value.trim())}
+          placeholder="What is your room .."
+        />
+        <br />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+};
+```
 
 这就是我们在聊天应用中使用 `useState` 的方式。同样我们从 React 中导入 hook，用其来初始化用户 id 和聊天室位置，如果用户已登录，则设置这些值，如果用户已注销，则返回登陆表单。
 
@@ -110,7 +117,9 @@ date: "2019-08-19T10:08:00.000Z"
 
 我们将会使用一个叫做 [useSocket](https://github.com/iamgyz/use-socket.io-client) 的一个开源的 hook 来连接我们的服务器。不同于 `useState`，它并不内置于 React，所以在使用之前，我们需要将它添加到我们的项目中。
 
-    npm add use-socket.io-client
+```shell
+npm add use-socket.io-client
+```
 
 与服务端的连接是通过使用 React Hooks 版本的 socket.io 库，这是一种更简单的方式来保持与服务端的 websocket 连接。我们用它来发送和接收实时消息，比如连接到一个房间。
 
@@ -118,19 +127,25 @@ date: "2019-08-19T10:08:00.000Z"
 
 `useSocket` 的基本用法如下所示：
 
-    const [socket] = useSocket('socket-url')
+```tsx
+const [socket] = useSocket('socket-url')
+```
 
 我们将会使用一些 socket API。为了便于参考，所有使用到的 API 都已经在 [socket.io官方文档](https://socket.io/docs) 中被列出。但是现在，让我们导入之前已经安装好的 hook。
 
-    import useSocket from 'use-socket.io-client';
+```tsx
+import useSocket from 'use-socket.io-client';
+```
 
 接下来，我们需要初始化这个钩子来与我们的服务端进行连接。然后我们将在控制台中记录 socket 来检查它是否正常连接。
 
-    const [id, setId] = useState('');
-    const [socket] = useSocket('https://open-chat-naostsaecf.now.sh');
-    
-    socket.connect();
-    console.log(socket);
+```tsx
+const [id, setId] = useState('');
+const [socket] = useSocket('https://open-chat-naostsaecf.now.sh');
+
+socket.connect();
+console.log(socket);
+```
 
 此时打开浏览器控制台，代码片段中的 URL 应已被记录下来。
 
@@ -142,11 +157,15 @@ date: "2019-08-19T10:08:00.000Z"
 
 同样，它并没有内置与 React 中，所以我们需要将它导入到项目中：
 
-    npm add use-immer
+```shell
+npm add use-immer
+```
 
 它的基本用法非常简单。构造函数返回的数组中第一个值是当前状态，第二个值是更新该状态的函数。而传入 `useImmer` 函数的参数将作为当前状态的初始值。
 
-    const [data, setData] = useImmer(default_value)
+```tsx
+const [data, setData] = useImmer(default_value)
+```
 
 ### 使用 setData
 
@@ -154,15 +173,17 @@ date: "2019-08-19T10:08:00.000Z"
 
 因此，我们的原始数据将会被保留，直到我们运行完该函数并且清楚无误地更新完新数据。
 
-    setData(draftState => { 
-      draftState.operation(); 
-    });
-    
-    // ...or
-    
-    setData(draft => newState);
-    
-    // Here, draftState is a copy of the current data
+```tsx
+setData(draftState => { 
+  draftState.operation(); 
+});
+
+// ...or
+
+setData(draft => newState);
+
+// Here, draftState is a copy of the current data
+```
 
 ### 使用 useEffect
 
@@ -170,60 +191,68 @@ date: "2019-08-19T10:08:00.000Z"
 
 我们需要做的仅仅是直接引入它，而不需要安装。
 
-    import React, { useState, useEffect } from 'react';
+```tsx
+import React, { useState, useEffect } from 'react';
+```
 
 我们需要一个组件来更加数组中的 **sender ID** 是否存在来渲染一条**消息**或者是**更新提示**，作为有创造力的人，我们将它叫做 `Messages` 组件。
 
-    const Messages = props => props.data.map(m => m[0] !== '' ? 
-    (<li key={m[0]}><strong>{m[0]}</strong> : <div className="innermsg">{m[1]}</div></li>) 
-    : (<li key={m[1]} className="update">{m[1]}</li>) );
+```tsx
+const Messages = props => props.data.map(m => m[0] !== '' ? 
+(<li key={m[0]}><strong>{m[0]}</strong> : <div className="innermsg">{m[1]}</div></li>) 
+: (<li key={m[1]} className="update">{m[1]}</li>) );
+```
 
 让我们将 socket 逻辑放入 `useEffect` 中，这样当组件重新渲染时，我们就不会重新复制同一套消息集。
 
 我们将在组件中定义消息 hook，用它与 socket 进行连接，然后再 `useEffect` 中为新消息和更新设置监听器。我们还将在监听器中设置更新函数。
 
-    const [socket] = useSocket('https://open-chat-naostsaecf.now.sh');      
-    socket.connect();
-    
-    const [messages, setMessages] = useImmer([]);
-    useEffect(()=>{
-      socket.on('update', message => setMessages(draft => {
-        draft.push(['', message]);
-      }));
-    
-      socket.on('message que',(nick, message) => {
-        setMessages(draft => {
-          draft.push([nick, message])
-        })
-      });
-    },0);
+```tsx
+const [socket] = useSocket('https://open-chat-naostsaecf.now.sh');      
+socket.connect();
+
+const [messages, setMessages] = useImmer([]);
+useEffect(()=>{
+  socket.on('update', message => setMessages(draft => {
+    draft.push(['', message]);
+  }));
+
+  socket.on('message que',(nick, message) => {
+    setMessages(draft => {
+      draft.push([nick, message])
+    })
+  });
+},0);
+```
 
 另外，如果用户名和房间名填写正确，我们还会增加一条 "join" 消息。这将触发其余的事件监听器，我们可以在该房间中接收到过去房间里发送的消息以及任何需要的更新。
 
-    // ...
-      socket.emit('join', name, room);
-    };
-    
-    return id ? (
-      <section style={{ display: "flex", flexDirection: "row" }}>
-          <ul id="messages">
-            <Messages data={messages} />
-          </ul>
-          <ul id="online">
-            {" "}
-            &#x1f310; : <Online data={online} />{" "}
-          </ul>
-          <div id="sendform">
-            <form onSubmit={e => handleSend(e)} style={{ display: "flex" }}>
-              <input id="m" onChange={e => setInput(e.target.value.trim())} />
-              <button style={{ width: "75px" }} type="submit">
-                Send
-              </button>
-            </form>
-          </div>
-        </section>
-    ) : (
-    // ...
+```tsx
+// ...
+  socket.emit('join', name, room);
+};
+
+return id ? (
+  <section style={{ display: "flex", flexDirection: "row" }}>
+      <ul id="messages">
+        <Messages data={messages} />
+      </ul>
+      <ul id="online">
+        {" "}
+        &#x1f310; : <Online data={online} />{" "}
+      </ul>
+      <div id="sendform">
+        <form onSubmit={e => handleSend(e)} style={{ display: "flex" }}>
+          <input id="m" onChange={e => setInput(e.target.value.trim())} />
+          <button style={{ width: "75px" }} type="submit">
+            Send
+          </button>
+        </form>
+      </div>
+    </section>
+) : (
+// ...
+```
 
 ### 最后的调整
 
@@ -235,102 +264,104 @@ date: "2019-08-19T10:08:00.000Z"
 
 所有的这些都是基于我们之前已经讨论过的内容，我将再 `App.js` 这个文件中放入项目的完整代码，来显示这些内容是如何组合在一起的。
 
-    // App.js
-    
-    import React, { useState, useEffect } from 'react';
-    import useSocket from 'use-socket.io-client';
-    import { useImmer } from 'use-immer';
-    
-    import './index.css';
-    
-    const Messages = props => props.data.map(m => m[0] !== '' ? (<li><strong>{m[0]}</strong> : <div className="innermsg">{m[1]}</div></li>) : (<li className="update">{m[1]}</li>));
-    
-    const Online = props => props.data.map(m => <li id={m[0]}>{m[1]}</li>);
-    
-    export default () => {
-      const [id, setId] = useState('');
-      const [nameInput, setNameInput] = useState('');
-      const [room, setRoom] = useState('');
-      const [input, setInput] = useState('');
-    
-      const [socket] = useSocket('https://open-chat-naostsaecf.now.sh');
-      socket.connect();
-    
-      const [messages, setMessages] = useImmer([]);
-      const [online, setOnline] = useImmer([]);
-    
-      useEffect(() => {
-        socket.on('message que', (nick, message) => {
-          setMessages(draft => {
-            draft.push([nick, message])
-          })
-        });
-    
-        socket.on('update', message => setMessages(draft => {
-          draft.push(['', message]);
-        }));
-    
-        socket.on('people-list', people => {
-          let newState = [];
-          for (let person in people) {
-            newState.push([people[person].id, people[person].nick]);
-          }
-          setOnline(draft => { draft.push(...newState) });
-          console.log(online)
-        });
-    
-        socket.on('add-person', (nick, id) => {
-          setOnline(draft => {
-            draft.push([id, nick])
-          })
-        });
-    
-        socket.on('remove-person', id => {
-          setOnline(draft => draft.filter(m => m[0] !== id))
-        });
-    
-        socket.on('chat message', (nick, message) => {
-          setMessages(draft => { draft.push([nick, message]) })
-        });
-      }, 0);
-    
-      const handleSubmit = e => {
-        e.preventDefault();
-        if (!nameInput) {
-          return alert("Name can't be empty");
-        }
-        setId(name);
-        socket.emit("join", name, room);
-      };
-    
-      const handleSend = e => {
-        e.preventDefault();
-        if (input !== '') {
-          socket.emit('chat message', input, room);
-          setInput('');
-        }
-      };
-    
-      return id ? (
-        <section style={{ display: 'flex', flexDirection: 'row' }} >
-          <ul id="messages"><Messages data={messages} /></ul>
-          <ul id="online"> &#x1f310; : <Online data={online} /> </ul>
-          <div id="sendform">
-            <form onSubmit={e => handleSend(e)} style={{ display: 'flex' }}>
-              <input id="m" onChange={e => setInput(e.target.value.trim())} /><button style={{ width: '75px' }} type="submit">Send</button>
-            </form>
-          </div>
-        </section>
-      ) : (
-          <div style={{ textAlign: 'center', margin: '30vh auto', width: '70%' }}>
-            <form onSubmit={event => handleSubmit(event)}>
-              <input id="name" onChange={e => setNameInput(e.target.value.trim())} required placeholder="What is your name .." /><br />
-              <input id="room" onChange={e => setRoom(e.target.value.trim())} placeholder="What is your room .." /><br />
-              <button type="submit">Submit</button>
-            </form>
-          </div>
-        );
-    };
+```tsx
+// App.js
+
+import React, { useState, useEffect } from 'react';
+import useSocket from 'use-socket.io-client';
+import { useImmer } from 'use-immer';
+
+import './index.css';
+
+const Messages = props => props.data.map(m => m[0] !== '' ? (<li><strong>{m[0]}</strong> : <div className="innermsg">{m[1]}</div></li>) : (<li className="update">{m[1]}</li>));
+
+const Online = props => props.data.map(m => <li id={m[0]}>{m[1]}</li>);
+
+export default () => {
+  const [id, setId] = useState('');
+  const [nameInput, setNameInput] = useState('');
+  const [room, setRoom] = useState('');
+  const [input, setInput] = useState('');
+
+  const [socket] = useSocket('https://open-chat-naostsaecf.now.sh');
+  socket.connect();
+
+  const [messages, setMessages] = useImmer([]);
+  const [online, setOnline] = useImmer([]);
+
+  useEffect(() => {
+    socket.on('message que', (nick, message) => {
+      setMessages(draft => {
+        draft.push([nick, message])
+      })
+    });
+
+    socket.on('update', message => setMessages(draft => {
+      draft.push(['', message]);
+    }));
+
+    socket.on('people-list', people => {
+      let newState = [];
+      for (let person in people) {
+        newState.push([people[person].id, people[person].nick]);
+      }
+      setOnline(draft => { draft.push(...newState) });
+      console.log(online)
+    });
+
+    socket.on('add-person', (nick, id) => {
+      setOnline(draft => {
+        draft.push([id, nick])
+      })
+    });
+
+    socket.on('remove-person', id => {
+      setOnline(draft => draft.filter(m => m[0] !== id))
+    });
+
+    socket.on('chat message', (nick, message) => {
+      setMessages(draft => { draft.push([nick, message]) })
+    });
+  }, 0);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!nameInput) {
+      return alert("Name can't be empty");
+    }
+    setId(name);
+    socket.emit("join", name, room);
+  };
+
+  const handleSend = e => {
+    e.preventDefault();
+    if (input !== '') {
+      socket.emit('chat message', input, room);
+      setInput('');
+    }
+  };
+
+  return id ? (
+    <section style={{ display: 'flex', flexDirection: 'row' }} >
+      <ul id="messages"><Messages data={messages} /></ul>
+      <ul id="online"> &#x1f310; : <Online data={online} /> </ul>
+      <div id="sendform">
+        <form onSubmit={e => handleSend(e)} style={{ display: 'flex' }}>
+          <input id="m" onChange={e => setInput(e.target.value.trim())} /><button style={{ width: '75px' }} type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+  ) : (
+      <div style={{ textAlign: 'center', margin: '30vh auto', width: '70%' }}>
+        <form onSubmit={event => handleSubmit(event)}>
+          <input id="name" onChange={e => setNameInput(e.target.value.trim())} required placeholder="What is your name .." /><br />
+          <input id="room" onChange={e => setRoom(e.target.value.trim())} placeholder="What is your room .." /><br />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    );
+};
+```
 
 ### 结语
 
