@@ -1,7 +1,7 @@
 ---
 title: "给 Gatsby 添加暗黑模式"
 date: "2019-10-16T15:58:06.692Z"
-description: "我们之前在 CSS-Tricks 就已经了解过 React Hooks。我有 一篇文章 介绍它们，来说明如何使用它们通过函数来创建组件。这两篇文章都大概地介绍了它们的运作方式，但也开辟了很多可能性。"
+description: "最近无论是 Native APP 还是 Web APP，似乎都掀起了暗黑模式（Dark Mode）的潮流。似乎好像哪家不出暗黑模式，就落伍了一样。"
 ---
 
 最近无论是 Native APP 还是 Web APP，似乎都掀起了暗黑模式（Dark Mode）的潮流。似乎好像哪家不出暗黑模式，就落伍了一样。
