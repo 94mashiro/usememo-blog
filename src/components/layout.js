@@ -8,8 +8,8 @@ import DarkModeToggle from "./darkModeToggle"
 export const Layout = props => {
   const { location, title, children } = props
   const rootPath = `${__PATH_PREFIX__}/`
-  const { darkMode } = useDarkMode()
-
+  const { darkMode } = useDarkMode({ darkClassName: 'dark', lightClassName: 'light' })
+  console.log('render')
   const Header = useMemo(() => {
     if (location.pathname === rootPath) {
       return (

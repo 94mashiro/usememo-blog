@@ -1,29 +1,34 @@
-import React, { useState, createContext, useEffect, useMemo } from 'react'
-
-
-
-export const DarkModeContext = createContext({})
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 export const useDarkMode = ({
   lightClassName,
   darkClassName
 } = {}) => {
-  const currentMode = useMemo(() => {
+  const defaultMode = useMemo(() => {
     try {
       return window.localStorage.getItem('mode') || 'light'
     } catch (err) {
       return 'light'
     }
   }, [])
-  const [darkMode, setDarkMode] = useState(currentMode)
+  const [darkMode, setDarkMode] = useState(defaultMode)
 
-  const effectBodyClass = mode => {
-    const bodyClassName = (mode === 'light' ? lightClassName : darkClassName) || mode
-    document.querySelector('body').setAttribute('class', bodyClassName)
-  }
+  const effectBodyClass = useCallback(
+    mode => {
+      const classList = document.querySelector('body').classList
+      if (mode === 'light') {
+        classList.add(lightClassName)
+        classList.remove(darkClassName)
+      } else {
+        classList.add(darkClassName)
+        classList.remove(lightClassName)
+      }
+    },
+    [lightClassName, darkClassName],
+  )
 
   useEffect(() => {
-    effectBodyClass(currentMode)
+    effectBodyClass(defaultMode)
   }, [])
   
   const toggleDarkMode = (mode) => {
@@ -38,13 +43,4 @@ export const useDarkMode = ({
     darkMode,
     toggleDarkMode,
   }
-}
-
-export const DarkModeProvider = props => {
-  const { darkMode, toggleDarkMode } = useDarkMode()
-  return (
-    <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
-      {props.children}
-    </DarkModeContext.Provider>
-  )
 }

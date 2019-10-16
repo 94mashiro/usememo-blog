@@ -16,7 +16,7 @@ const Sun = () => {
 }
 
 const DarkModeToggle = () => {
-  const { darkMode, toggleDarkMode } = useDarkMode()
+  const { darkMode, toggleDarkMode } = useDarkMode({ darkClassName: 'dark', lightClassName: 'light' })
   const isChecked = useMemo(() => {
     return darkMode === 'dark'
   }, [darkMode])
