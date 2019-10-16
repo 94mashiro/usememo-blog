@@ -49,9 +49,9 @@
   transition: all 0.2s ease;
 }
 
-.react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track {
+/* .react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track {
   background-color: #000000;
-}
+} */
 
 .react-toggle--checked .react-toggle-track {
   background-color: #19AB27;
@@ -63,7 +63,7 @@
 
 .react-toggle-track-check {
   position: absolute;
-  width: 14px;
+  width: 10px;
   height: 10px;
   top: 0px;
   bottom: 0px;
@@ -75,6 +75,7 @@
   -webkit-transition: opacity 0.25s ease;
   -moz-transition: opacity 0.25s ease;
   transition: opacity 0.25s ease;
+  transform: scale(1.3);
 }
 
 .react-toggle--checked .react-toggle-track-check {
@@ -98,6 +99,7 @@
   -webkit-transition: opacity 0.25s ease;
   -moz-transition: opacity 0.25s ease;
   transition: opacity 0.25s ease;
+  transform: scale(1.5);
 }
 
 .react-toggle--checked .react-toggle-track-x {
@@ -140,3 +142,24 @@
   -moz-box-shadow: 0px 0px 5px 5px #0099E0;
   box-shadow: 0px 0px 5px 5px #0099E0;
 }
+
+
+/* Modify Style Start */
+
+.react-toggle--checked .react-toggle-track, .react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
+  background-color: var(--blue6);
+}
+
+.react-toggle--focus .react-toggle-thumb {
+  -webkit-box-shadow: 0px 0px 2px 3px var(--blue4);
+  -moz-box-shadow: 0px 0px 2px 3px var(--blue4);
+  box-shadow: 0px 0px 2px 3px var(--blue4);
+}
+
+.react-toggle:active:not(.react-toggle--disabled) .react-toggle-thumb {
+  -webkit-box-shadow: 0px 0px 5px 5px var(--blue4);
+  -moz-box-shadow: 0px 0px 5px 5px var(--blue4);
+  box-shadow: 0px 0px 5px 5px var(--blue4);
+}
+
+/* Modify Style End */

@@ -66,7 +66,7 @@ module.exports = {
         short_name: `useMemo`,
         start_url: `/`,
         background_color: `#ffffff`,
-        theme_color: `#007acc`,
+        theme_color: `#fa8c16`,
         display: `minimal-ui`,
         icon: `content/assets/profile-pic.jpg`,
       },

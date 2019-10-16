@@ -22,8 +22,10 @@ class BlogPostTemplate extends React.Component {
           <header>
             <h1
               style={{
+                ...scale(0.75),
                 marginTop: rhythm(1),
                 marginBottom: 0,
+                color: 'var(--textTitle)',
               }}
             >
               {post.frontmatter.title}
