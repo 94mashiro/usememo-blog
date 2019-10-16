@@ -1,4 +1,6 @@
-import React, { useState, createContext, useEffect } from 'react'
+import React, { useState, createContext, useEffect, useMemo } from 'react'
+
+
 
 export const DarkModeContext = createContext({})
 
@@ -6,7 +8,16 @@ export const useDarkMode = ({
   lightClassName,
   darkClassName
 } = {}) => {
-  const currentMode = localStorage.getItem('mode') || 'light'
+  const isSSRMode = useMemo(() => {
+    return window == null
+  }, [window])
+  const currentMode = useMemo(() => {
+    if (isSSRMode) {
+      return 'light'
+    } else {
+      return window.localStorage.getItem('mode') || 'light'
+    }
+  }, [isSSRMode])
   const [darkMode, setDarkMode] = useState(currentMode)
 
   const effectBodyClass = mode => {
@@ -20,7 +31,9 @@ export const useDarkMode = ({
   
   const toggleDarkMode = (mode) => {
     setDarkMode(mode)
-    localStorage.setItem('mode', mode)
+    if (!isSSRMode) {
+      window.localStorage.setItem('mode', mode)
+    }
     effectBodyClass(mode)
   }
 
