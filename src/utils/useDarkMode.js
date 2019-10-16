@@ -8,16 +8,13 @@ export const useDarkMode = ({
   lightClassName,
   darkClassName
 } = {}) => {
-  const isSSRMode = useMemo(() => {
-    return window == null
-  }, [window])
   const currentMode = useMemo(() => {
-    if (isSSRMode) {
-      return 'light'
-    } else {
+    try {
       return window.localStorage.getItem('mode') || 'light'
+    } catch (err) {
+      return 'light'
     }
-  }, [isSSRMode])
+  }, [])
   const [darkMode, setDarkMode] = useState(currentMode)
 
   const effectBodyClass = mode => {
@@ -31,7 +28,7 @@ export const useDarkMode = ({
   
   const toggleDarkMode = (mode) => {
     setDarkMode(mode)
-    if (!isSSRMode) {
+    if (typeof window !== 'undefined') {
       window.localStorage.setItem('mode', mode)
     }
     effectBodyClass(mode)
