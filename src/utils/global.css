@@ -1,14 +1,27 @@
 body {
-  background-color: var(--bg);
   --pink: rgb(255, 167, 196);
+}
+
+body.light {
   --bg: #ffffff;
   --header: var(--pink);
   --textNormal: #222;
   --textTitle: #222;
-  --textLink: #007acc;
+  --textLink: #d23669;
   --hr: hsla(0, 0%, 0%, 0.2);
   --inlineCode-bg: rgba(255, 229, 100, 0.2);
   --inlineCode-text: #1a1a1a;
+}
+
+body.dark {
+  --bg: #282c35;
+  --header: #ffffff;
+  --textNormal: rgba(255, 255, 255, 0.88);
+  --textTitle: #ffffff;
+  --textLink: var(--pink);
+  --hr: hsla(0, 0%, 100%, 0.2);
+  --inlineCode-bg: rgba(63, 63, 63, 1);
+  --inlineCode-text: #e6e6e6;
 }
 
 /**
