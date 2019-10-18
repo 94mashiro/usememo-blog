@@ -8,8 +8,10 @@ import DarkModeToggle from "./darkModeToggle"
 export const Layout = props => {
   const { location, title, children } = props
   const rootPath = `${__PATH_PREFIX__}/`
-  const { darkMode } = useDarkMode({ darkClassName: 'dark', lightClassName: 'light' })
-  console.log('render')
+  const { darkMode } = useDarkMode({
+    darkClassName: "dark",
+    lightClassName: "light",
+  })
   const Header = useMemo(() => {
     if (location.pathname === rootPath) {
       return (
@@ -31,17 +33,17 @@ export const Layout = props => {
           >
             {title}
           </Link>
-       </h1>
+        </h1>
       )
     } else {
       return (
         <h3
           style={{
-            fontFamily: 'Montserrat, sans-serif',
+            fontFamily: "Montserrat, sans-serif",
             marginTop: 0,
             marginBottom: 0,
             height: 42, // because
-            lineHeight: '2.625rem',
+            lineHeight: "2.625rem",
           }}
         >
           <Link
@@ -63,10 +65,10 @@ export const Layout = props => {
   return (
     <div
       style={{
-        color: 'var(--textNormal)',
-        background: 'var(--bg)',
-        transition: 'color 0.2s ease-out, background 0.2s ease-out',
-        minHeight: '100vh',
+        color: "var(--textNormal)",
+        background: "var(--bg)",
+        transition: "color 0.2s ease-out, background 0.2s ease-out",
+        minHeight: "100vh",
       }}
     >
       <div
@@ -80,10 +82,10 @@ export const Layout = props => {
       >
         <header
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '2.625rem',
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "2.625rem",
           }}
         >
           {Header}
