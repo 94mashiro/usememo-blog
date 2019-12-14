@@ -24,17 +24,15 @@ description: "最近接手了一个将模块升级 [zent](https://youzan.github.
 
 > The **`table-layout`** CSS property sets the algorithm used to lay out <table> cells, rows, and columns.
 >
-> 1. [`auto`](https://developer.mozilla.org/en-US/docs/Web/CSS/auto)
+> [auto](https://developer.mozilla.org/en-US/docs/Web/CSS/auto):
 >
->    By default, most browsers use an automatic table layout algorithm. The widths of the table and its cells are adjusted to fit the content.
+> By default, most browsers use an automatic table layout algorithm. The widths of the table and its cells are adjusted to fit the content.
 >
-> 2. **fixed**
+> **fixed:**
 >
->    Table and column widths are set by the widths of `table` and `col` elements or by the width of the first row of cells. Cells in subsequent rows do not affect column widths.
+> Table and column widths are set by the widths of `table` and `col` elements or by the width of the first row of cells. Cells in subsequent rows do not affect column widths.
 >
->    Under the "fixed" layout method, the entire table can be rendered once the first table row has been downloaded and analyzed. This can speed up rendering time over the "automatic" layout method, but subsequent cell content might not fit in the column widths provided. Cells use the [`overflow`](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow) property to determine whether to clip any overflowing content, but only if the table has a known width; otherwise, they won't overflow the cells.
-
-
+> Under the "fixed" layout method, the entire table can be rendered once the first table row has been downloaded and analyzed. This can speed up rendering time over the "automatic" layout method, but subsequent cell content might not fit in the column widths provided. Cells use the [`overflow`](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow) property to determine whether to clip any overflowing content, but only if the table has a known width; otherwise, they won't overflow the cells.
 
 其实这个属性规定了单元格宽度的计算方式，默认值为 auto，此时单元格的宽度由其内容决定，如果设置为 fixed，单元格的宽度由第一行的单元格决定，此时可以通过 overflow 属性来控制单元格里的内容是否溢出。
 
