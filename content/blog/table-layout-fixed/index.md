@@ -34,6 +34,8 @@ description: "最近接手了一个将模块升级 [zent](https://youzan.github.
 >
 >    Under the "fixed" layout method, the entire table can be rendered once the first table row has been downloaded and analyzed. This can speed up rendering time over the "automatic" layout method, but subsequent cell content might not fit in the column widths provided. Cells use the [`overflow`](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow) property to determine whether to clip any overflowing content, but only if the table has a known width; otherwise, they won't overflow the cells.
 
+
+
 其实这个属性规定了单元格宽度的计算方式，默认值为 auto，此时单元格的宽度由其内容决定，如果设置为 fixed，单元格的宽度由第一行的单元格决定，此时可以通过 overflow 属性来控制单元格里的内容是否溢出。
 
 一般 table 元素会通过 colgroup 这个子元素开控制列的样式，它没有具体内容。
